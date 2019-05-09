@@ -6,7 +6,7 @@ const db = require("../models");
 
 
 router.get("/", function(req, res) {
-  db.Article.find({ saved: false })
+  db.Article.find({})
     .then(function(dbArticle) {
       const hbsObject = {
         articles: dbArticle

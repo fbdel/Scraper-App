@@ -10,8 +10,9 @@
 $(function () {
 
     // Whenever someone clicks a p tag
-  $(document).on("click", "p", function() {
+  $(document).on("click", "#view-note", function() {
     // Empty the notes from the note section
+
     $("#notes").empty();
     // Save the id from the p tag
     var thisId = $(this).attr("data-id");
@@ -24,14 +25,26 @@ $(function () {
       // With that done, add the note information to the page
       .then(function(data) {
         console.log(data);
+        $("#notes").append("<div class= 'card' style='float: right;'>");
+        $("#notes").append("<h3><u>Note<u> <h3>");
         // The title of the article
-        $("#notes").append("<h2>" + data.title + "</h2>");
+        $("#notes").append("<h4>" + data.title + "</h4>");
         // An input to enter a new title
-        $("#notes").append("<input id='titleinput' name='title' >");
+        $("#notes").append(
+          "<input width='40' id='titleinput' name='title' placeholder='Title Here '> <br>"
+        );
         // A textarea to add a new note body
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+        $("#notes").append(
+          "<textarea rows='5' cols='40' id='bodyinput' name='body' placeholder='Text Comments Here'></textarea> <br>"
+        );
         // A button to submit a new note, with the id of the article saved to it
-        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+        $("#notes").append(
+          "<button data-id='" +
+            data._id +
+            "' id='savenote'>Save Note</button>"
+        );
+        $("#notes").append("</div><hr><hr>");
+        // $("#view-note").remove();
 
         // If there's a note in the article
         if (data.note) {
@@ -66,8 +79,12 @@ $(function () {
         console.log(data);
         // Empty the notes section
         $("#notes").empty();
+        
+       
       });
 
+    
+        
     // Also, remove the values entered in the input and textarea for note entry
     $("#titleinput").val("");
     $("#bodyinput").val("");
@@ -91,7 +108,38 @@ $(function () {
     $.ajax({
       url: "/scrape",
       type: "GET"}).then (function() {
-        console.log ("Scrape complete")
+        $.ajax({
+          url:'/articles',
+          type:'GET'
+      })
+      .then(article=>{
+          if(!article){
+              $('.noArticles').text('No Articles Scraped')
+          }
+          else{
+              article.forEach((e,i)=>{
+         let title = `<p data-id="${e._id}" style="text-align:center; font-size:30px; font-weight bold"><u>${e.title}<u></p>`;
+         let summary = `<h5>${e.summary}</h5>`
+         let location = `<h6>${e.location}</h6>`
+         let link = `<a style="color:blue; font-size:1em;" href="https://www.indeed.com${e.link}"><u>Job Link<u></a><br><br>`
+         let buttnNote = `<button id="view-note" data-id=${
+           e._id
+         } type="button" class="btn btn-outline-info">View Note</button><hr style="background:white">`
+          let notes = `<div id="notes"></div>`
+
+
+                $("#articles").append(title)
+                $("#articles").append(summary)
+                $('#articles').append(location)
+                $('#articles').append(link)
+                $("#articles").append(buttnNote);
+                $('#articles').append(notes)
+                
+
+              })
+              $(".noArticles").empty()
+          }
+      })
 
       });
   });

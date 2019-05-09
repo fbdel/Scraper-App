@@ -1,20 +1,28 @@
 
-
 <div class="articles">
-    {{#each articles}}
-        <div class="bg-info text-white" id="articles">
-            <h2>{{title}}</h2>
-            <h3>{{location}}</h3>
-            <h3>{{summary}}</h3>
-            <a href ="{{link}}">{{link}}</a>
-        </div>
-        <div id="notes">
-            <p>{{note}}</p>
+ 
+        <div class="bg-light text-dark card-body" id="articles"></div>
+
+        <div class="notes"></div>
+            
         </div>
 
 
-    {{/each}}
-    {{#unless articles}}
-    <h3 class="text-center">No Articles Scraped</h3>
-    {{/unless}}
+  
+    <h3 class="text-center noArticles">No Articles</h3>
+  
 </div>
+
+{{!-- <script>
+    $('p').on('click',()=>{
+        $.ajax({
+            url:'/articles/',
+            type:'GET'
+        })
+        .then(data=>{
+            let notes = `<div data-id="${data.title}" id="notes></div>`
+        })
+         
+    })
+   
+</script> --}}
